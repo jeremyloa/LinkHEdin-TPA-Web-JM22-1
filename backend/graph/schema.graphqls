@@ -1,0 +1,304 @@
+# GraphQL schema example
+
+# USER
+type User {
+  id: ID!
+  profile: String!
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  headline: String!
+  cover: String!
+  activated: Boolean!
+  activationID: ID!
+  followed: String!
+  connected: String!
+  requestconnect: String!
+  blocked: String!
+  views: Int!
+  resetID: ID!
+  google: String!
+}
+
+input InputRegister {
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  google: String!
+  profile: String!
+}
+
+input InputLogin {
+  email: String!
+  password: String!
+  google: String!
+}
+
+input InputActivate {
+  activationID: ID!
+}
+
+input InputResetPass {
+  email: String!
+}
+
+input InputResetCode {
+  resetID: ID!
+}
+
+input InputNewPass {
+  email: String!
+  password: String!
+}
+
+input InputConnectFollowBlock {
+  id: ID!
+  id2: ID!
+}
+
+input InputView {
+  id: ID!
+}
+
+input InputUpdateProfile {
+  id: ID!
+  profile: String!
+  name: String!
+  headline: String!
+  cover: String!
+}
+
+# EXPERIENCE
+type Experience {
+  id: ID!
+  userID: ID!
+  title: String!
+  type: String!
+  company: String!
+  country: String!
+  isActive: Boolean!
+  startYear: Int!
+  endYear: Int!
+}
+
+input InputExperience {
+  userID: ID!
+  title: String!
+  type: String!
+  company: String!
+  country: String!
+  isActive: Boolean!
+  startYear: Int!
+  endYear: Int!
+}
+
+input InputSetExperience {
+  id: ID!
+  userID: ID!
+  title: String!
+  type: String!
+  company: String!
+  country: String!
+  isActive: Boolean!
+  startYear: Int!
+  endYear: Int!
+}
+
+# EDUCATION
+type Education {
+  id: ID!
+  userID: ID!
+  institution: String!
+  degree: String!
+  field: String!
+  grade: Float!
+  isActive: Boolean!
+  startYear: Int!
+  endYear: Int!
+  activities: String!
+  desc: String!
+}
+
+input InputEducation {
+  userID: ID!
+  institution: String!
+  degree: String!
+  field: String!
+  grade: Float!
+  isActive: Boolean!
+  startYear: Int!
+  endYear: Int!
+  activities: String!
+  desc: String!
+}
+
+input InputSetEducation {
+  id: ID!
+  userID: ID!
+  institution: String!
+  degree: String!
+  field: String!
+  grade: Float!
+  isActive: Boolean!
+  startYear: Int!
+  endYear: Int!
+  activities: String!
+  desc: String!
+}
+
+# HASHTAG
+type Hashtag {
+  id: ID!
+  content: String!
+}
+
+# POST
+type Post {
+	id: ID!
+	poster: ID!
+	content: String!
+	image: String!
+	video: String!
+	postdate: String!
+  liker: String!  
+}
+
+input InputPost{
+	poster: ID!
+	content: String!
+	image: String!
+	video: String!
+	postdate: String!
+}
+
+input InputSetPost{
+	id: ID!
+	poster: ID!
+	content: String!
+	image: String!
+	video: String!
+}
+
+input InputLikePost{
+  id: ID!
+  liker: ID!
+}
+
+# COMMENTS
+type Comment {
+  id: ID!
+  parentPost: ID!
+  parentComment: ID!
+  commenter: ID!
+  content: String!
+  postdate: String!
+  liker: String!
+}
+
+input InputComment{
+  parentPost: ID!
+  parentComment: ID!
+  commenter: ID!
+  content: String!
+  postdate: String!
+}
+
+input InputSetComment{
+  id: ID!
+  content: String!
+}
+
+input InputLikeComment{
+  id: ID!
+  liker: ID!
+}
+
+# JOBS
+type Job {
+  id: ID!
+  poster: ID!
+  title: String!
+  company: String!
+  location: String!
+  employment: String!
+  description: String!
+}
+
+input InputNewJobPost {
+  poster: ID!
+  title: String!
+  company: String!
+  location: String!
+  employment: String!
+  description: String!
+}
+
+type Query {
+  # USER
+  Users: [User!]!
+  UserbyID(id: ID!): User!
+  UserbyEmail(email: String!): User!
+  UserbyUname(username: String!): User!
+  # EXPERIENCE
+  Experiences: [Experience!]!
+  ExperiencebyID(id: ID!): Experience!
+  ExperiencesbyUserID(userID: ID!): [Experience!]!
+  # EDUCATION
+  Education: [Education!]!
+  EducationbyID(id: ID!): Education!
+  EducationsbyUserID(userID: ID!): [Education!]!
+  # HASHTAG
+  Hashtag: [Hashtag!]!
+  HashtagbyID(id: ID!): Hashtag!
+  HashtagbyText(content: String!): Hashtag!
+  # POST
+  Post: [Post!]!
+  PostbyID(id: ID!): Post!
+  PostbyPoster(poster: ID!): [Post!]!
+  # COMMENT
+  Comment: [Comment!]!
+  CommentbyID(id: ID!): Comment
+  CommentsbyPost(parentPost: ID!): [Comment!]!
+  # JOB
+  Job: [Job]!
+}
+
+type Mutation {
+  # USER
+  Login(input: InputLogin!): User!
+  createUser(input: InputRegister!): User!
+  activateUser(input: InputActivate!): User!
+  resetPass(input: InputResetPass!): User!
+  setPass(input: InputNewPass!): User!
+  resetCode(input: InputResetCode!): User! 
+  sendConnect(input: InputConnectFollowBlock): User!
+  acceptConnect(input: InputConnectFollowBlock): User!
+  toggleFollow(input: InputConnectFollowBlock): User!
+  toggleBlock(input: InputConnectFollowBlock): User!
+  addView(username: String!): User!
+  setProfile(input: InputUpdateProfile!): User!
+  # EXPERIENCE
+  createExp(input: InputExperience!): Experience!
+  setExp(input: InputSetExperience!): Experience!
+  deleteExp(id: ID!): Experience!
+  # EDUCATION
+  createEdu(input: InputEducation!): Education!
+  setEdu(input: InputSetEducation!): Education!
+  deleteEdu(id: ID!): Education!
+  # HASHTAG
+  createHashtag(content: String!): Hashtag!
+  # POST
+  createPost(input: InputPost): Post!
+  setPost(input: InputSetPost): Post!
+  deletePost(id: ID!): Post!
+  toggleLike(input: InputLikePost): Post!
+  # COMMENT
+  createComment(input: InputComment): Comment!
+  setComment(input: InputSetComment): Comment!
+  deleteComment(id: ID!): Comment!
+  toggleLikeComment(input: InputLikeComment): Comment!
+  # JOB
+  createJob(input: InputNewJobPost): Job!
+}
